@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import dev.jullls.safeapp.R
 import dev.jullls.safeapp.databinding.FragmentHomeBinding
-import dev.jullls.safeapp.presentation.di.vm.BooksViewModel
+import dev.jullls.safeapp.presentation.vm.BooksViewModel
 import dev.jullls.safeapp.presentation.domain.model.Book
 import androidx.fragment.app.viewModels
 

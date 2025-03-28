@@ -1,4 +1,4 @@
-package dev.jullls.safeapp.presentation.di.vm
+package dev.jullls.safeapp.presentation.vm
 
 import android.util.Log
 import androidx.lifecycle.LiveData

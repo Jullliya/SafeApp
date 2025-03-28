@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    //alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -46,6 +47,7 @@ dependencies {
 
     // Glide
     implementation(libs.glide)
+    implementation(libs.androidx.navigation.fragment)
     annotationProcessor(libs.glide.compiler)
 
     // Core KTX
@@ -61,6 +63,10 @@ dependencies {
 
     // Для LiveData
     implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    annotationProcessor(libs.room.compiler)
+    //kapt(libs.room.compiler)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
