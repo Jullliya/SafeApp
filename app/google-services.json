@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "463259705790",
+    "project_id": "safeapp-455002",
+    "storage_bucket": "safeapp-455002.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:463259705790:android:e820bd618660adf18bd9ef",
+        "android_client_info": {
+          "package_name": "dev.jullls.safeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "463259705790-o44j8ochn36slohag81gdmk08htqc9ru.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.jullls.safeapp",
+            "certificate_hash": "e6d9edf1a6e52e8889b3529da7130db5d8e15eae"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhHPODfQ17Jz4NeBWgxJD6cjnHraCGafE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    //alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -41,33 +41,22 @@ android {
 
 dependencies {
 
-    // Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
-
-    // Glide
     implementation(libs.glide)
     implementation(libs.androidx.navigation.fragment)
     annotationProcessor(libs.glide.compiler)
-
-    // Core KTX
     implementation(libs.androidx.core.ktx)
-
-    // Корутины
     implementation(libs.kotlinx.coroutines.android)
-
-    // ViewModel с поддержкой корутин
     implementation(libs.lifecycle.viewmodel.ktx)
-    // Для viewModels() делегата
     implementation(libs.androidx.fragment.ktx)
-
-    // Для LiveData
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     annotationProcessor(libs.room.compiler)
-    //kapt(libs.room.compiler)
     implementation(libs.androidx.appcompat)
+    implementation(libs.play.services.auth)
+    implementation(libs.firebase.auth.ktx)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)

@@ -45,6 +45,30 @@ class SharedPrefs(context: Context) {
         }
     }
 
+    @Throws(AuthException::class)
+    fun saveOAuthUser(userId: String, email: String, name: String?) {
+        try {
+            with(sharedPref.edit()) {
+                putString("oauth_$userId", email)
+                name?.let { putString("oauth_name_$userId", it) }
+                apply()
+            }
+        } catch (e: Exception) {
+            throw AuthException.StorageError("Failed to save OAuth user")
+        }
+    }
+
+    @Throws(AuthException::class)
+    fun getOAuthUser(userId: String): Pair<String, String?>? {
+        return try {
+            val email = sharedPref.getString("oauth_$userId", null)
+            val name = sharedPref.getString("oauth_name_$userId", null)
+            email?.let { Pair(it, name) }
+        } catch (e: Exception) {
+            throw AuthException.StorageError("Failed to get OAuth user")
+        }
+    }
+
     private fun String.sha256(): String {
         return try {
             MessageDigest

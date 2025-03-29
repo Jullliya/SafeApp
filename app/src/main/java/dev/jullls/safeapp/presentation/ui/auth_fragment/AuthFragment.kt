@@ -1,6 +1,7 @@
 package dev.jullls.safeapp.presentation.ui.auth_fragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,16 +11,30 @@ import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import dev.jullls.safeapp.R
 import dev.jullls.safeapp.databinding.FragmentAuthBinding
 import dev.jullls.safeapp.presentation.data.shared_preference.SharedPrefs
 import dev.jullls.safeapp.presentation.exception.AuthException
-import dev.jullls.safeapp.presentation.ui.home_fragment.HomeFragment
 
 class AuthFragment : Fragment(R.layout.fragment_auth) {
     private var _binding: FragmentAuthBinding? = null
     private val binding get() = _binding!!
     private lateinit var sharedPrefs: SharedPrefs
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private val RC_SIGN_IN = 1001
+
+    override fun onStart() {
+        super.onStart()
+        val account = GoogleSignIn.getLastSignedInAccount(requireContext())
+        if (account != null) {
+            navigateToHome()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,6 +43,15 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
     ): View {
         _binding = FragmentAuthBinding.inflate(inflater, container, false)
         sharedPrefs = SharedPrefs(requireContext())
+
+        // Инициализация Google Sign-In
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+
         return binding.root
     }
 
@@ -37,6 +61,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         try {
             addTestUsers()
             setupUI()
+            setupGoogleSignIn()
         } catch (e: AuthException) {
             handleAuthError(e)
         }
@@ -113,6 +138,39 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
         binding.btnOauth2.setOnClickListener {
             Toast.makeText(requireContext(), "Google auth not implemented", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setupGoogleSignIn() {
+        binding.btnOauth2.setOnClickListener {
+            val signInIntent = googleSignInClient.signInIntent
+            startActivityForResult(signInIntent, RC_SIGN_IN)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            try {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                val account = task.getResult(ApiException::class.java)
+                handleGoogleSignInResult(account)
+            } catch (e: ApiException) {
+                Log.w("GoogleSignIn", "Sign-in failed: ${e.statusCode}")
+                showError("Ошибка входа через Google")
+            }
+        }
+    }
+
+    private fun handleGoogleSignInResult(account: GoogleSignInAccount) {
+        try {
+            sharedPrefs.saveOAuthUser(account.id!!, account.email!!, account.displayName)
+
+            navigateToHome()
+        } catch (e: Exception) {
+            Log.e("GoogleSignIn", "Error saving user data", e)
+            showError("Ошибка сохранения данных")
         }
     }
 
